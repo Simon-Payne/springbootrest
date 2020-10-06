@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
+import static uk.co.honestsoftware.products.ProductStore.BASE_CCY;
+
 @JsonIgnoreProperties(value = { "internalPrice" })
 public class Product {
 
@@ -44,11 +46,13 @@ public class Product {
         return viewablePrice;
     }
 
-    Product withInternalPrice(String viewInCcy) {
-        final MonetaryAmount amount = Monetary.getDefaultAmountFactory()
-                .setCurrency(viewInCcy).setNumber(20).create();
-        this.internalPrice = amount;
-        this.viewablePrice = internalPrice.toString();
+    Product withInternalPrice(String viewInCcy, double rateFromBase) {
+        if(!viewInCcy.equals(BASE_CCY)) {
+            final double newNumber = internalPrice.multiply(rateFromBase).getNumber().doubleValueExact();
+            this.internalPrice = Monetary.getDefaultAmountFactory()
+                    .setCurrency(viewInCcy).setNumber(newNumber).create();
+            this.viewablePrice = internalPrice.toString();
+        }
         return this;
     }
 

@@ -21,11 +21,11 @@ public class ProductTest {
     @Test
     public void appliesRequestedPriceCorrectly() {
         final Product product = new Product(1, "test", "test description", Monetary.getDefaultAmountFactory()
-                .setCurrency("GBP").setNumber(20).create()).withInternalPrice("USD");
+                .setCurrency("EUR").setNumber(20).create()).withInternalPrice("USD", 1.2);
         assertThat(product.getId()).isEqualTo(1);
         assertThat(product.getName()).isEqualTo("test");
         assertThat(product.getDescription()).isEqualTo("test description");
-        assertThat(product.getViewablePrice()).isEqualTo("USD 20");
+        assertThat(product.getViewablePrice()).isEqualTo("USD 24");
     }
 
 }
