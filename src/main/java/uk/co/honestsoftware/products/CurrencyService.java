@@ -1,7 +1,9 @@
 package uk.co.honestsoftware.products;
 
+import java.util.Optional;
+
 public interface CurrencyService {
 
-    Double getRateFor(String currency);
+    Optional<Double> getRateFor(String currency);
 
 }

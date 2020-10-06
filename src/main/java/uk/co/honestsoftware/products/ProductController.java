@@ -10,6 +10,8 @@ import java.util.List;
 @RestController
 public class ProductController {
 
+
+    @Autowired
     private final CurrencyService currencyService;
 
     @Autowired
@@ -20,11 +22,12 @@ public class ProductController {
 
     @GetMapping("/products")
     public List<Product> products(@RequestParam(value = "currency", defaultValue = "EUR") String currency) {
-        return ProductStore.allProducts("EUR", conversionRate("EUR"));
+        final double rate = conversionRate(currency);
+        return ProductStore.allProducts(currency, rate);
     }
 
     private double conversionRate(String currency) {
-        return currencyService.getRateFor(currency);
+        return currencyService.getRateFor(currency).orElseThrow(() -> new InvalidCurrencyCodeException(currency));
     }
 
 }

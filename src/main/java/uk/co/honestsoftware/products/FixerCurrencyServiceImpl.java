@@ -1,15 +1,21 @@
 package uk.co.honestsoftware.products;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//@Service
+import java.util.Optional;
+
+@Service
 public class FixerCurrencyServiceImpl implements CurrencyService {
 
-    // get rates from Fixer
-
+    @Autowired
+    private ProductAppProperties applicationProperties;
 
     @Override
-    public Double getRateFor(String currency) {
-        return 0.0;
+    public Optional<Double> getRateFor(String currency) {
+        if(ProductApplication.fixerData.getRates().containsKey(currency))  {
+            return Optional.of(ProductApplication.fixerData.getRates().get(currency));
+        }
+        return Optional.empty();
     }
 }
