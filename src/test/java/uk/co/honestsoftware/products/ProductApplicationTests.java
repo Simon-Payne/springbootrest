@@ -1,10 +1,10 @@
-package uk.co.honestsoftware.f1000task;
+package uk.co.honestsoftware.products;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ProductsApplicationTests {
+class ProductApplicationTests {
 
 	@Test
 	void contextLoads() {
