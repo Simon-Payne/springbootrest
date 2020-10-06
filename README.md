@@ -84,4 +84,5 @@ Plain text response: `Unrecognised currency code: XYZ`
       able to target sales more precisely.  Authorisation would be relevant for example where the pricing has different tiers depending
       on the identity and role of the requestor (an affiliated dealer would get different pricing
       from just anybody out there).
+       - *Robustness and Failover*: to ensure continuous availability.
        
