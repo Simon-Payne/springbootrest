@@ -33,7 +33,7 @@ public class ProductControllerTest {
                 Collectors.toMap(x -> x.getName(), x -> x));
         assertThat(before.get("widget").getViewablePrice()).isEqualTo("EUR 0.5");
         final List<Product> all = ProductStore.allProducts("USD", mockCurrencyService.getRateFor("USD").get());
-        assertThat(products).containsExactlyInAnyOrder(all.toArray(new Product[all.size()]));
+        assertThat(all.size()).isEqualTo(3);
         Map<String, Product> after = all.stream().collect(
                 Collectors.toMap(x -> x.getName(), x -> x));
         assertThat(after.get("widget").getViewablePrice()).isEqualTo("USD 0.6");
@@ -42,6 +42,18 @@ public class ProductControllerTest {
     @Test
     public void canHandleUnrecognisedCurrency() {
         assertThat(mockCurrencyService.getRateFor("ABC")).isEmpty();
+    }
+
+    @Test
+    public void canGetProductsinUSDThenEURCorrectly() {
+        given(mockCurrencyService.getRateFor("USD")).willReturn(Optional.of(1.2));
+        given(mockCurrencyService.getRateFor("EUR")).willReturn(Optional.of(1.0));
+        final Map<String, Product> dollarMap = ProductStore.allProducts("USD", mockCurrencyService.getRateFor("USD").get()).stream().collect(
+                Collectors.toMap(x -> x.getName(), x -> x));
+        final Map<String, Product> euroMap = ProductStore.allProducts("EUR", mockCurrencyService.getRateFor("EUR").get()).stream().collect(
+                Collectors.toMap(x -> x.getName(), x -> x));
+        assertThat(dollarMap.get("widget").getViewablePrice()).isEqualTo("USD 0.6");
+        assertThat(euroMap.get("widget").getViewablePrice()).isEqualTo("EUR 0.5");
     }
 
 }

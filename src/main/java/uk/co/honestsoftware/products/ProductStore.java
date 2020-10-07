@@ -32,8 +32,14 @@ class ProductStore {
 
     static final List<Product> allProducts(String viewInCcy, double rateFromBase) {
         return Arrays.asList(WIDGET, SPANNER, GUIDE_BOOK).stream()
-                .map(p -> p.withInternalPrice(viewInCcy, rateFromBase))
+                .map(p -> newProduct(p, viewInCcy, rateFromBase))
                 .collect(Collectors.toList());
+    }
+
+    private static Product newProduct(Product p, String viewCcy, double rate) {
+        return new Product(p.getId(), p.getName(), p.getDescription(),
+                Monetary.getDefaultAmountFactory()
+                        .setCurrency(viewCcy).setNumber(p.getInternalPrice().getNumber().doubleValue() * rate).create());
     }
 
 }
